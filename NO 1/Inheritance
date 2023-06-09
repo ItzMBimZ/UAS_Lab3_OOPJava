@@ -1,1 +1,65 @@
+class GameCharacter {
+    protected String name;
+    protected int health;
+    protected int level;
+
+    public GameCharacter(String name, int health, int level) {
+        this.name = name;
+        this.health = health;
+        this.level = level;
+    }
+
+    public void attack() {
+        System.out.println(name + " attacks!");
+    }
+
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            System.out.println(name + " has been defeated!");
+        } else {
+            System.out.println(name + " takes " + damage + " damage!");
+        }
+    }
+}
+
+class Warrior extends GameCharacter {
+    private int strength;
+
+    public Warrior(String name, int health, int level, int strength) {
+        super(name, health, level);
+        this.strength = strength;
+    }
+
+    public void specialAttack() {
+        System.out.println(name + " performs a special attack with strength " + strength + "!");
+    }
+}
+
+class Mage extends GameCharacter {
+    private int intelligence;
+
+    public Mage(String name, int health, int level, int intelligence) {
+        super(name, health, level);
+        this.intelligence = intelligence;
+    }
+
+    public void castSpell() {
+        System.out.println(name + " casts a spell with intelligence " + intelligence + "!");
+    }
+}
+
+public class Game {
+    public static void main(String[] args) {
+        Warrior warrior = new Warrior("Warrior", 100, 1, 10);
+        warrior.attack();
+        warrior.specialAttack();
+        warrior.takeDamage(20);
+
+        Mage mage = new Mage("Mage", 80, 1, 15);
+        mage.attack();
+        mage.castSpell();
+        mage.takeDamage(30);
+    }
+}
 
