@@ -1,0 +1,61 @@
+abstract class Benda {
+    protected double massa;
+
+    public Benda(double massa) {
+        this.massa = massa;
+    }
+
+    public abstract double hitungKecepatan();
+
+    public abstract double hitungEnergiKinetik();
+}
+
+class Bola extends Benda {
+    private double radius;
+
+    public Bola(double massa, double radius) {
+        super(massa);
+        this.radius = radius;
+    }
+
+    @Override
+    public double hitungKecepatan() {
+        return Math.sqrt(2 * hitungEnergiKinetik() / massa);
+    }
+
+    @Override
+    public double hitungEnergiKinetik() {
+        return 0.5 * massa * Math.pow(hitungKecepatan(), 2);
+    }
+}
+
+class Mobil extends Benda {
+    private double kecepatan;
+
+    public Mobil(double massa, double kecepatan) {
+        super(massa);
+        this.kecepatan = kecepatan;
+    }
+
+    @Override
+    public double hitungKecepatan() {
+        return kecepatan;
+    }
+
+    @Override
+    public double hitungEnergiKinetik() {
+        return 0.5 * massa * Math.pow(kecepatan, 2);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Benda bola = new Bola(0.5, 1.2);
+        System.out.println("Kecepatan bola: " + bola.hitungKecepatan());
+        System.out.println("Energi kinetik bola: " + bola.hitungEnergiKinetik());
+
+        Benda mobil = new Mobil(1000, 30);
+        System.out.println("Kecepatan mobil: " + mobil.hitungKecepatan());
+        System.out.println("Energi kinetik mobil: " + mobil.hitungEnergiKinetik());
+    }
+}
