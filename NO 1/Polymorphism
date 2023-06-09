@@ -1,61 +1,53 @@
-abstract class Benda {
-    protected double massa;
+abstract class Siswa {
+    protected String nama;
+    protected double[] nilai;
 
-    public Benda(double massa) {
-        this.massa = massa;
+    public Siswa(String nama, double[] nilai) {
+        this.nama = nama;
+        this.nilai = nilai;
     }
 
-    public abstract double hitungKecepatan();
-
-    public abstract double hitungEnergiKinetik();
+    public abstract double hitungRataRata();
 }
 
-class Bola extends Benda {
-    private double radius;
-
-    public Bola(double massa, double radius) {
-        super(massa);
-        this.radius = radius;
+class SiswaSMP extends Siswa {
+    public SiswaSMP(String nama, double[] nilai) {
+        super(nama, nilai);
     }
 
     @Override
-    public double hitungKecepatan() {
-        return Math.sqrt(2 * hitungEnergiKinetik() / massa);
-    }
-
-    @Override
-    public double hitungEnergiKinetik() {
-        return 0.5 * massa * Math.pow(hitungKecepatan(), 2);
+    public double hitungRataRata() {
+        double total = 0;
+        for (double n : nilai) {
+            total += n;
+        }
+        return total / nilai.length;
     }
 }
 
-class Mobil extends Benda {
-    private double kecepatan;
-
-    public Mobil(double massa, double kecepatan) {
-        super(massa);
-        this.kecepatan = kecepatan;
+class SiswaSMA extends Siswa {
+    public SiswaSMA(String nama, double[] nilai) {
+        super(nama, nilai);
     }
 
     @Override
-    public double hitungKecepatan() {
-        return kecepatan;
-    }
-
-    @Override
-    public double hitungEnergiKinetik() {
-        return 0.5 * massa * Math.pow(kecepatan, 2);
+    public double hitungRataRata() {
+        double total = 0;
+        for (double n : nilai) {
+            total += n;
+        }
+        return total / nilai.length;
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Benda bola = new Bola(0.5, 1.2);
-        System.out.println("Kecepatan bola: " + bola.hitungKecepatan());
-        System.out.println("Energi kinetik bola: " + bola.hitungEnergiKinetik());
+        double[] nilaiSMP = {80, 85, 90, 95, 75};
+        Siswa siswaSMP = new SiswaSMP("Siswa SMP", nilaiSMP);
+        System.out.println("Rata-rata nilai siswa SMP: " + siswaSMP.hitungRataRata());
 
-        Benda mobil = new Mobil(1000, 30);
-        System.out.println("Kecepatan mobil: " + mobil.hitungKecepatan());
-        System.out.println("Energi kinetik mobil: " + mobil.hitungEnergiKinetik());
+        double[] nilaiSMA = {70, 75, 80, 85, 90};
+        Siswa siswaSMA = new SiswaSMA("Siswa SMA", nilaiSMA);
+        System.out.println("Rata-rata nilai siswa SMA: " + siswaSMA.hitungRataRata());
     }
 }
