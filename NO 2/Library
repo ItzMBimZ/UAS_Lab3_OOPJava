@@ -1,0 +1,177 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+// Interface untuk buku yang dapat dipinjam
+interface Lendable {
+    void lend();
+}
+
+// Kelas abstrak yang mewakili sebuah buku
+abstract class Book {
+    private String title;
+    private String author;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public abstract void displayInfo();
+}
+
+// Kelas yang mewakili buku perpustakaan
+class LibraryBook extends Book implements Lendable {
+    private boolean isAvailable;
+
+    public LibraryBook(String title, String author) {
+        super(title, author);
+        this.isAvailable = true;
+    }
+
+    public void lend() {
+        if (isAvailable) {
+            isAvailable = false;
+            System.out.println("Buku dipinjamkan dengan sukses.");
+        } else {
+            System.out.println("Buku tidak tersedia untuk dipinjam.");
+        }
+    }
+
+    public void displayInfo() {
+        System.out.println("Judul: " + getTitle());
+        System.out.println("Penulis: " + getAuthor());
+        System.out.println("Ketersediaan: " + (isAvailable ? "Tersedia" : "Dipinjam"));
+    }
+}
+
+// Kelas yang mewakili buku referensi
+class ReferenceBook extends Book {
+    private String topic;
+
+    public ReferenceBook(String title, String author, String topic) {
+        super(title, author);
+        this.topic = topic;
+    }
+
+    public void displayInfo() {
+        System.out.println("Judul: " + getTitle());
+        System.out.println("Penulis: " + getAuthor());
+        System.out.println("Topik: " + topic);
+    }
+}
+
+// Kelas yang mewakili perpustakaan
+class Library {
+    private List<Book> books;
+
+    public Library() {
+        books = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+}
+
+public class LibraryApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Library library = new Library();
+
+        // Menambahkan contoh buku ke perpustakaan
+        library.addBook(new LibraryBook("Java Programming", "John Smith"));
+        library.addBook(new LibraryBook("Python Basics", "Jane Doe"));
+        library.addBook(new ReferenceBook("Mathematics Handbook", "Michael Johnson", "Matematika"));
+
+        while (true) {
+            System.out.println("===================================");
+            System.out.println("Sistem Manajemen Perpustakaan");
+            System.out.println("===================================");
+            System.out.println("1. Tampilkan Semua Buku");
+            System.out.println("2. Tambah Buku Baru");
+            System.out.println("3. Pinjam Buku");
+            System.out.println("4. Keluar");
+            System.out.println("===================================");
+
+            System.out.print("Masukkan pilihan Anda: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Pilihan tidak valid. Mohon masukkan pilihan yang valid.");
+                scanner.next(); // Membersihkan masukan yang tidak valid
+            }
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Daftar Buku:");
+                    for (Book book : library.getBooks()) {
+                        book.displayInfo();
+                        System.out.println("-----------------------------------");
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Masukkan judul buku: ");
+                    String title = scanner.next();
+                    System.out.print("Masukkan nama penulis: ");
+                    String author = scanner.next();
+                    System.out.print("Apakah buku tersebut buku referensi? (y/n): ");
+                    String isReference = scanner.next();
+
+                    Book newBook;
+                    if (isReference.equalsIgnoreCase("y")) {
+                        System.out.print("Masukkan topik buku: ");
+                        String topic = scanner.next();
+                        newBook = new ReferenceBook(title, author, topic);
+                    } else {
+                        newBook = new LibraryBook(title, author);
+                    }
+
+                    library.addBook(newBook);
+                    System.out.println("Buku berhasil ditambahkan.");
+                    break;
+
+                case 3:
+                    System.out.print("Masukkan judul buku yang ingin dipinjam: ");
+                    String lendTitle = scanner.next();
+                    boolean bookFound = false;
+
+                    // Cari buku di perpustakaan dan pinjam jika tersedia
+                    for (Book book : library.getBooks()) {
+                        if (book != null && book.getTitle().equalsIgnoreCase(lendTitle) && book instanceof Lendable) {
+                            ((Lendable) book).lend();
+                            bookFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!bookFound) {
+                        System.out.println("Buku tidak tersedia di perpustakaan.");
+                    }
+                    break;
+
+                case 4:
+                    System.out
+                            .println("Terima kasih telah menggunakan Sistem Manajemen Perpustakaan. Selamat tinggal!");
+                    scanner.close(); // Menutup objek Scanner sebelum keluar
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Pilihan tidak valid. Mohon masukkan pilihan yang valid.");
+            }
+        }
+    }
+}
