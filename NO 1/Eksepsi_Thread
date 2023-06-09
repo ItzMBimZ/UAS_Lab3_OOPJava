@@ -1,0 +1,39 @@
+class MatematikaRunnable implements Runnable {
+    private int angka1;
+    private int angka2;
+
+    public MatematikaRunnable(int angka1, int angka2) {
+        this.angka1 = angka1;
+        this.angka2 = angka2;
+    }
+
+    @Override
+    public void run() {
+        try {
+            int hasil = bagi(angka1, angka2);
+            System.out.println("Hasil pembagian: " + hasil);
+        } catch (ArithmeticException e) {
+            System.out.println("Terjadi kesalahan: " + e.getMessage());
+        }
+    }
+
+    private int bagi(int angka1, int angka2) {
+        if (angka2 == 0) {
+            throw new ArithmeticException("Pembagian oleh nol tidak diperbolehkan");
+        }
+        return angka1 / angka2;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MatematikaRunnable matematikaRunnable1 = new MatematikaRunnable(10, 2);
+        MatematikaRunnable matematikaRunnable2 = new MatematikaRunnable(20, 0);
+
+        Thread thread1 = new Thread(matematikaRunnable1);
+        Thread thread2 = new Thread(matematikaRunnable2);
+
+        thread1.start();
+        thread2.start();
+    }
+}
